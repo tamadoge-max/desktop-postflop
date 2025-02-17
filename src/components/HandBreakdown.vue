@@ -14,7 +14,7 @@
             <span>Unimproved:</span>
             <span>{{ formatEV(strengthBreakdown.unimproved) }}</span>
           </div>
-          <div class="breakdown-row">
+          <div class="breakdown-row" v-if="strengthBreakdown.set !== undefined">
             <span>Improve to Set:</span>
             <span>{{ formatEV(strengthBreakdown.set) }}</span>
           </div>
@@ -32,11 +32,11 @@
             <span>Unimproved:</span>
             <span>{{ formatEV(strengthBreakdown.unimproved) }}</span>
           </div>
-          <div class="breakdown-row">
+          <div class="breakdown-row" v-if="strengthBreakdown.pair !== undefined">
             <span>Improve to Pair:</span>
             <span>{{ formatEV(strengthBreakdown.pair) }}</span>
           </div>
-          <div class="breakdown-row">
+          <div class="breakdown-row" v-if="strengthBreakdown.twoPairTrips !== undefined">
             <span>Improve to 2Pair/Trips:</span>
             <span>{{ formatEV(strengthBreakdown.twoPairTrips) }}</span>
           </div>
@@ -116,8 +116,8 @@ const isPocketPair = computed(() => {
   return props.hand[0] === props.hand[2];
 });
 
-const formatEV = (ev: number) => {
-  return ev.toFixed(2);
+const formatEV = (ev: number | undefined) => {
+  return ev?.toFixed(2) ?? '0.00';
 };
 </script>
 

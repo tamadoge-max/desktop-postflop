@@ -133,11 +133,17 @@
     </div>
 
     <div 
-      class="hand-row"
-      v-for="hand in hands" 
-      :key="hand"
-      @click="showHandBreakdown(hand)"
+      v-if="hands.length > 0"
+      class="hand-list"
     >
+      <div 
+        class="hand-row"
+        v-for="hand in hands" 
+        :key="hand"
+        @click="showHandBreakdown(hand)"
+      >
+        {{ hand }}
+      </div>
     </div>
 
     <HandBreakdown
@@ -333,11 +339,21 @@ const onDealCard = (card: number) => {
 
 const selectedHand = ref<string | null>(null);
 
+const hands = computed(() => {
+  if (!results.value || !selectedSpot.value) return [];
+  // Return the list of hands from your results
+  // This will depend on your data structure
+  return []; // Replace with actual hand list
+});
+
 const currentStrengthBreakdown = computed(() => {
-  if (!selectedHand.value) return null;
+  if (!selectedHand.value) return {
+    unimproved: 0,
+    straight: 0,
+    flushPlus: 0
+  };
   
   // Calculate strength breakdowns from the solver results
-  // This will need to be implemented based on your solver's data structure
   return {
     unimproved: 17.02,
     pair: 1.91,
@@ -348,10 +364,16 @@ const currentStrengthBreakdown = computed(() => {
 });
 
 const currentActionBreakdown = computed(() => {
-  if (!selectedHand.value) return null;
+  if (!selectedHand.value) return {
+    onlyChecks: 0,
+    faceBet: 0,
+    faceRaise: 0,
+    makeBet: 0,
+    makeRaise: 0,
+    makeCall: 0
+  };
   
   // Calculate action breakdowns from the solver results
-  // This will need to be implemented based on your solver's data structure
   return {
     onlyChecks: 5.0,
     faceBet: 3.2,
