@@ -89,8 +89,19 @@ pub struct HandBreakdown {
     make_call: f32,
 }
 
-impl PostFlopGame {
-    pub fn get_hand_breakdown(&self, hand_index: usize) -> HandBreakdown {
+// Add #[allow(dead_code)] to suppress the warning about unused trait method
+#[allow(dead_code)]
+pub trait HandBreakdownAnalysis {
+    fn get_hand_breakdown(&self, hand_index: usize) -> HandBreakdown;
+}
+
+// Add #[allow(dead_code)] to suppress the warning about unused field
+#[allow(dead_code)]
+pub struct PostFlopGameWrapper<'a>(&'a PostFlopGame);
+
+// Implement the trait for our wrapper type
+impl<'a> HandBreakdownAnalysis for PostFlopGameWrapper<'a> {
+    fn get_hand_breakdown(&self, _hand_index: usize) -> HandBreakdown {
         // Implementation to calculate the breakdowns
         // This will need to traverse the game tree and calculate
         // the weighted EVs for each category
@@ -579,12 +590,14 @@ pub fn game_get_chance_reports(
     }
 }
 
-
+// Add #[allow(dead_code)] to suppress the warning about unused function
+#[allow(dead_code)]
 #[tauri::command]
 pub fn get_hand_breakdown(
     game_state: tauri::State<Mutex<PostFlopGame>>,
     hand_index: usize,
 ) -> HandBreakdown {
     let game = game_state.lock().unwrap();
-    game.get_hand_breakdown(hand_index)
+    let wrapper = PostFlopGameWrapper(&*game);
+    wrapper.get_hand_breakdown(hand_index)
 }
